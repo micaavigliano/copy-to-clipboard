@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ICopyToClipboard {
   text: string;
 }
 
 const CopyToClipboard: React.FC<ICopyToClipboard> = ({ text }) => {
+  const [copyText, setCopyText] = useState<boolean>(false);
   const handleCopyText = () => {
-    console.log(text);
-    navigator.clipboard.writeText(text!).then(
-      (success) => console.log("copied", success),
-      (error) => console.log("error", error)
-    );
+    navigator.clipboard.writeText(text!).then(() => {
+      setCopyText(true);
+      setTimeout(() => {
+        setCopyText(false);
+      }, 5000);
+    });
   };
   return (
     <>
-      <button onClick={handleCopyText}>Copy!</button>
+      <button onClick={handleCopyText}>{copyText ? "Copied!" : "Copy"}</button>
     </>
   );
 };
